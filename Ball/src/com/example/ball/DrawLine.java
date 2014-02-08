@@ -11,13 +11,14 @@ public class DrawLine extends View{
 
 	public DrawLine(Context context) {
         super(context);
-        paint.setColor(Color.GREEN);
+        paint.setColor(Color.WHITE);
+        paint.setStrokeWidth(5);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
-            canvas.drawLine(0, 0, 20, 20, paint);
-            canvas.drawLine(20, 0, 0, 20, paint);
+            canvas.drawLine(0, 0, 100, 20, paint);
+            canvas.drawLine(100, 0, 0, 20, paint);
     }
 
 }
