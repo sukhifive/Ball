@@ -16,7 +16,7 @@ public class AnimationView extends ImageView {
     private int xVelocity = 10;
     private int yVelocity = 5;
     private Handler h;
-    private final int FRAME_RATE = 30;
+    private final int FRAME_RATE = 1;
 
     public AnimationView(Context context, AttributeSet attrs) {
 		super(context, attrs);
