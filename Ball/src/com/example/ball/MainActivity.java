@@ -11,9 +11,10 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        DrawLine drawLine = new DrawLine(this);
-//        drawLine.setBackgroundColor(Color.BLUE);
-//        setContentView(drawLine);
+        DrawLine drawLine = new DrawLine(this);
+        drawLine.setBackgroundColor(Color.TRANSPARENT);
+        setContentView(drawLine);
+      //  setContentView(R.layout.activity_main);
         
     }
 

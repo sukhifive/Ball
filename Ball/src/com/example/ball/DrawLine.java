@@ -17,8 +17,8 @@ public class DrawLine extends View{
 
     @Override
     public void onDraw(Canvas canvas) {
-            canvas.drawLine(0, 0, 100, 20, paint);
-            canvas.drawLine(100, 0, 0, 20, paint);
+            canvas.drawLine(0, 0, 100, 200, paint);
+            canvas.drawLine(100, 0, 0, 200, paint);
     }
 
 }
