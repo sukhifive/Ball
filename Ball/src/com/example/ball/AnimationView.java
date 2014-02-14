@@ -18,6 +18,13 @@ public class AnimationView extends ImageView {
     private Handler h;
     private final int FRAME_RATE = 1;
 
+    
+    public AnimationView(Context context) {
+		super(context);
+		 mContext = context;
+	        h = new Handler();
+	        
+	}
     public AnimationView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		 mContext = context;
@@ -46,7 +53,8 @@ public class AnimationView extends ImageView {
          }
     }
     c.drawBitmap(ball.getBitmap(), x, y, null);
-    h.postDelayed(r, FRAME_RATE);
+    //h.postDelayed(r, FRAME_RATE);
+    this.invalidate();
 }
 
 
