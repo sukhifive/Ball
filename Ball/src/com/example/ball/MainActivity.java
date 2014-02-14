@@ -6,20 +6,32 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-    @Override
+   
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FrameLayout layout  = (FrameLayout) this.findViewById(R.layout.activity_main);
-        
-       // setContentView(R.layout.activity_main);
-//        DrawLine drawLine = new DrawLine(this);
-//        drawLine.setBackgroundColor(color.transparent);
-//        layout.addView(drawLine);
-    //    setContentView(drawLine);
         setContentView(R.layout.activity_main);
+        LinearLayout layoutTest  = (LinearLayout) this.findViewById(R.id.mainLayout);
+        
+        
+        
+        
+        layoutTest.setLayoutParams(new FrameLayout.LayoutParams(
+        		LinearLayout.LayoutParams.MATCH_PARENT,
+        		LinearLayout.LayoutParams.MATCH_PARENT));
+        
+        DrawLine drawLine = new DrawLine(this);
+        
+        drawLine.setBackgroundColor(color.transparent);
+        TextView t = new TextView(getApplicationContext());
+        t.setText("Hello world");
+        layoutTest.addView(t);
+    //    setContentView(drawLine);
+        
         
     }
 
