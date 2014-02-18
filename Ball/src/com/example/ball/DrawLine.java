@@ -32,7 +32,7 @@ public class DrawLine extends View implements OnTouchListener {
 
     @Override
     public void onDraw(Canvas canvas) {
-    		System.out.println("ssssssssssssssssssssss");
+    		//System.out.println("ssssssssssssssssssssss");
             canvas.drawLine(0, 0, 100, 200, paint);
             canvas.drawLine(100, 0, 0, 200, paint);
             canvas.drawLine(downx, downy, upx, upy, paint);
@@ -45,7 +45,7 @@ public class DrawLine extends View implements OnTouchListener {
 		int action = event.getAction();
 	    switch (action) {
 	    case MotionEvent.ACTION_DOWN:
-	      System.out.println("down");
+	    //  System.out.println("down");
 	      downx = event.getX();
 	      downy = event.getY();
 	      break;

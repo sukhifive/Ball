@@ -1,61 +1,205 @@
 package com.example.ball;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageView;
 
 public class AnimationView extends ImageView {
-	
-	
+
 	private Context mContext;
-    int x = -1;
-    int y = -1;
-    private int xVelocity = 10;
-    private int yVelocity = 5;
-    private Handler h;
-    private final int FRAME_RATE = 1;
+	int x = -1;
+	int y = -1;
+	private int xVelocity = 10;
+	private int yVelocity = 5;
+	private Handler h;
+	private final int FRAME_RATE = 1;
+	BitmapDrawable ball;
+	private float downx;
+	private float downy;
+	private float upx;
+	private float upy;
+	private Paint paint = new Paint();
 
-    
-    public AnimationView(Context context) {
+	public int width;
+	public int height;
+	private Bitmap mBitmap;
+	private Canvas mCanvas;
+	private Path mPath;
+	private Paint mBitmapPaint;
+	Context context;
+	private Paint circlePaint;
+	private Path circlePath;
+	private Paint mPaint;
+
+	public AnimationView(Context context) {
 		super(context);
-		 mContext = context;
-	        h = new Handler();
-	        
-	}
-    public AnimationView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		 mContext = context;
-	        h = new Handler();
-	        
-	}
- private Runnable r = new Runnable() {
-         @Override
-         public void run() {
-                 invalidate();
-         }
- };
- protected void onDraw(Canvas c) {
-         BitmapDrawable ball = (BitmapDrawable) mContext.getResources().getDrawable(R.drawable.ball);
-     if (x<0 && y <0) {
-         x = this.getWidth()/2;
-         y = this.getHeight()/2;
-     } else {
-         x += xVelocity;
-         y += yVelocity;
-         if ((x > this.getWidth() - ball.getBitmap().getWidth()) || (x < 0)) {
-                 xVelocity = xVelocity*-1;
-         }
-         if ((y > this.getHeight() - ball.getBitmap().getHeight()) || (y < 0)) {
-                 yVelocity = yVelocity*-1;
-         }
-    }
-    c.drawBitmap(ball.getBitmap(), x, y, null);
-    //h.postDelayed(r, FRAME_RATE);
-    this.invalidate();
-}
+		mContext = context;
+		h = new Handler();
+		ball = (BitmapDrawable) mContext.getResources().getDrawable(
+				R.drawable.ball);
+		this.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+		paint.setColor(Color.WHITE);
+		paint.setStrokeWidth(5);
 
+		mPath = new Path();
+		mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+		circlePaint = new Paint();
+		circlePath = new Path();
+		circlePaint.setAntiAlias(true);
+		circlePaint.setColor(Color.BLUE);
+		circlePaint.setStyle(Paint.Style.STROKE);
+		circlePaint.setStrokeJoin(Paint.Join.MITER);
+		circlePaint.setStrokeWidth(4f);
+
+	}
+
+	@Override
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		super.onSizeChanged(w, h, oldw, oldh);
+
+		mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+		mCanvas = new Canvas(mBitmap);
+
+	}
+
+	public AnimationView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		mContext = context;
+		h = new Handler();
+		ball = (BitmapDrawable) mContext.getResources().getDrawable(
+				R.drawable.ball);
+		this.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+		paint.setColor(Color.WHITE);
+		paint.setStrokeWidth(5);
+
+		mPath = new Path();
+		mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+		circlePaint = new Paint();
+		circlePath = new Path();
+		circlePaint.setAntiAlias(true);
+		circlePaint.setColor(Color.BLUE);
+		circlePaint.setStyle(Paint.Style.STROKE);
+		circlePaint.setStrokeJoin(Paint.Join.MITER);
+		circlePaint.setStrokeWidth(4f);
+
+		mPaint = new Paint();
+		mPaint.setAntiAlias(true);
+		mPaint.setDither(true);
+		mPaint.setColor(Color.GREEN);
+		mPaint.setStyle(Paint.Style.STROKE);
+		mPaint.setStrokeJoin(Paint.Join.ROUND);
+		mPaint.setStrokeCap(Paint.Cap.ROUND);
+		mPaint.setStrokeWidth(12);
+	}
+
+	private Runnable r = new Runnable() {
+		@Override
+		public void run() {
+			invalidate();
+		}
+	};
+
+	protected void onDraw(Canvas c) {
+		super.onDraw(c);
+		if (x < 0 && y < 0) {
+			x = this.getWidth() / 2;
+			y = this.getHeight() / 2;
+		} else {
+			x += xVelocity;
+			y += yVelocity;
+			if ((x > this.getWidth() - ball.getBitmap().getWidth()) || (x < 0)) {
+				xVelocity = xVelocity * -1;
+			}
+			if ((y > this.getHeight() - ball.getBitmap().getHeight())
+					|| (y < 0)) {
+				yVelocity = yVelocity * -1;
+			}
+		}
+		// c.drawLine(downx, downy, upx, upy, paint);
+		c.drawBitmap(ball.getBitmap(), x, y, null);
+
+		c.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
+
+		c.drawPath(mPath, mPaint);
+
+		c.drawPath(circlePath, circlePaint);
+
+		// h.postDelayed(r, FRAME_RATE);
+		// this.invalidate(x, y, x + 200, y+200);
+		this.invalidate();
+	}
+
+	private float mX, mY;
+	private static final float TOUCH_TOLERANCE = 4;
+
+	private void touch_start(float x, float y) {
+		mPath.reset();
+		mPath.moveTo(x, y);
+		mX = x;
+		mY = y;
+	}
+
+	private void touch_move(float x, float y) {
+		float dx = Math.abs(x - mX);
+		float dy = Math.abs(y - mY);
+		if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+			mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
+			mX = x;
+			mY = y;
+
+			circlePath.reset();
+			circlePath.addCircle(mX, mY, 30, Path.Direction.CW);
+		}
+	}
+
+	private void touch_up() {
+		mPath.lineTo(mX, mY);
+		circlePath.reset();
+		// commit the path to our offscreen
+		mCanvas.drawPath(mPath, mPaint);
+		// kill this so we don't double draw
+		mPath.reset();
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		int action = event.getAction();
+		float x = event.getX();
+		float y = event.getY();
+		switch (action) {
+		case MotionEvent.ACTION_DOWN:
+			// System.out.println("down");
+			downx = event.getX();
+			downy = event.getY();
+			touch_start(x, y);
+			break;
+		case MotionEvent.ACTION_MOVE:
+			upx = event.getX();
+			upy = event.getY();
+			touch_move(x, y);
+			// canvas.drawLine(downx, downy, upx, upy, paint);
+			// invalidate();
+			break;
+		case MotionEvent.ACTION_UP:
+			upx = event.getX();
+			upy = event.getY();
+			touch_up();
+			break;
+		case MotionEvent.ACTION_CANCEL:
+			break;
+		default:
+			break;
+		}
+		return true;
+	}
 
 }
