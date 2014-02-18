@@ -25,7 +25,7 @@ public class AnimationView extends ImageView {
 	private int xVelocity = 10;
 	private int yVelocity = 5;
 	private Handler h;
-	private final int FRAME_RATE = 1;
+	private final int FRAME_RATE = 10;
 	BitmapDrawable ball;
 	private float downx;
 	private float downy;
@@ -136,11 +136,11 @@ public class AnimationView extends ImageView {
 
 		c.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
 		
-	//	c.drawPath(mPath, mPaint);
+		//c.drawPath(mPath, mPaint);
 
-		// h.postDelayed(r, FRAME_RATE);
+		 h.postDelayed(r, FRAME_RATE);
 		
-		this.invalidate();
+		//this.invalidate();
 	}
 
 	private float mX, mY;
