@@ -1,11 +1,15 @@
 package com.example.ball;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -39,6 +43,7 @@ public class AnimationView extends ImageView {
 	private Paint circlePaint;
 	private Path circlePath;
 	private Paint mPaint;
+	private List<Line> lines;
 
 	public AnimationView(Context context) {
 		super(context);
@@ -99,6 +104,8 @@ public class AnimationView extends ImageView {
 		mPaint.setStrokeJoin(Paint.Join.ROUND);
 		mPaint.setStrokeCap(Paint.Cap.ROUND);
 		mPaint.setStrokeWidth(12);
+		
+		lines = new ArrayList<Line>();
 	}
 
 	private Runnable r = new Runnable() {
@@ -109,7 +116,7 @@ public class AnimationView extends ImageView {
 	};
 
 	protected void onDraw(Canvas c) {
-		super.onDraw(c);
+		
 		if (x < 0 && y < 0) {
 			x = this.getWidth() / 2;
 			y = this.getHeight() / 2;
@@ -124,50 +131,92 @@ public class AnimationView extends ImageView {
 				yVelocity = yVelocity * -1;
 			}
 		}
-		// c.drawLine(downx, downy, upx, upy, paint);
+		
 		c.drawBitmap(ball.getBitmap(), x, y, null);
 
 		c.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
-
-		c.drawPath(mPath, mPaint);
-
-		c.drawPath(circlePath, circlePaint);
+		
+	//	c.drawPath(mPath, mPaint);
 
 		// h.postDelayed(r, FRAME_RATE);
-		// this.invalidate(x, y, x + 200, y+200);
+		
 		this.invalidate();
 	}
 
 	private float mX, mY;
 	private static final float TOUCH_TOLERANCE = 4;
+	private float sX, sY;
 
 	private void touch_start(float x, float y) {
 		mPath.reset();
 		mPath.moveTo(x, y);
 		mX = x;
 		mY = y;
+		sX = x;
+		sY = y;
 	}
 
 	private void touch_move(float x, float y) {
-		float dx = Math.abs(x - mX);
-		float dy = Math.abs(y - mY);
-		if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
-			mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
-			mX = x;
-			mY = y;
-
-			circlePath.reset();
-			circlePath.addCircle(mX, mY, 30, Path.Direction.CW);
-		}
+//		float dx = Math.abs(x - mX);
+//		float dy = Math.abs(y - mY);
+//		if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+//			mPath.moveTo(mX, mY);
+////			mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
+//			mX = x;
+//			mY = y;
+//
+//			circlePath.reset();
+//			circlePath.addCircle(mX, mY, 30, Path.Direction.CW);
+//			mCanvas.drawPath(mPath, mPaint);
+//			// kill this so we don't double draw
+//			mPath.reset();
+//		}
+		mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+		mX = x;
+		mY = y;
+		mPath.moveTo(sX, sY);
+		mPath.lineTo(mX, mY);
+	//	circlePath.reset();
+		// commit the path to our offscreen
+		mCanvas.drawPath(mPath, mPaint);
+		
+		
+		// kill this so we don't double draw
+		mPath.reset();
+		//mPath.rewind();
+		mPath.moveTo(sX, sY);
+		//
+		drawLines();
 	}
 
 	private void touch_up() {
-		mPath.lineTo(mX, mY);
-		circlePath.reset();
-		// commit the path to our offscreen
-		mCanvas.drawPath(mPath, mPaint);
-		// kill this so we don't double draw
-		mPath.reset();
+		mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+		Line line = new Line();
+		line.setStartPointX(sX);
+		line.setStartPointY(sY);
+		line.setEndPointX(mX);
+		line.setEndPointY(mY);
+		
+		lines.add(line);
+//		mPath.lineTo(mX, mY);
+//		circlePath.reset();
+//		// commit the path to our offscreen
+//		mCanvas.drawPath(mPath, mPaint);
+//		// kill this so we don't double draw
+//		mPath.reset();
+		
+		drawLines();
+	}
+	
+	private void drawLines()
+	{
+		for(Line l: lines)
+		{
+			mPath.moveTo(l.getStartPointX(), l.getStartPointY());
+			mPath.lineTo(l.getEndPointX(), l.getEndPointY());
+			mCanvas.drawPath(mPath, mPaint);
+			mPath.reset();
+		}
 	}
 
 	@Override
