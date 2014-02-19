@@ -44,28 +44,12 @@ public class AnimationView extends ImageView {
 	private Path circlePath;
 	private Paint mPaint;
 	private List<Line> lines;
+	
+	private float mX, mY;
+	private static final float TOUCH_TOLERANCE = 4;
+	private float sX, sY;
 
-	public AnimationView(Context context) {
-		super(context);
-		mContext = context;
-		h = new Handler();
-		ball = (BitmapDrawable) mContext.getResources().getDrawable(
-				R.drawable.ball);
-		this.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-		paint.setColor(Color.WHITE);
-		paint.setStrokeWidth(5);
 
-		mPath = new Path();
-		mBitmapPaint = new Paint(Paint.DITHER_FLAG);
-		circlePaint = new Paint();
-		circlePath = new Path();
-		circlePaint.setAntiAlias(true);
-		circlePaint.setColor(Color.BLUE);
-		circlePaint.setStyle(Paint.Style.STROKE);
-		circlePaint.setStrokeJoin(Paint.Join.MITER);
-		circlePaint.setStrokeWidth(4f);
-
-	}
 
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -103,7 +87,7 @@ public class AnimationView extends ImageView {
 		mPaint.setStyle(Paint.Style.STROKE);
 		mPaint.setStrokeJoin(Paint.Join.ROUND);
 		mPaint.setStrokeCap(Paint.Cap.ROUND);
-		mPaint.setStrokeWidth(12);
+		mPaint.setStrokeWidth(25);
 		
 		lines = new ArrayList<Line>();
 	}
@@ -133,6 +117,8 @@ public class AnimationView extends ImageView {
 		}
 		
 		c.drawBitmap(ball.getBitmap(), x, y, null);
+	//	System.out.println("width: " + ball.getBounds().contains(r));
+		
 
 		c.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
 		
@@ -143,9 +129,7 @@ public class AnimationView extends ImageView {
 		//this.invalidate();
 	}
 
-	private float mX, mY;
-	private static final float TOUCH_TOLERANCE = 4;
-	private float sX, sY;
+	
 
 	private void touch_start(float x, float y) {
 		mPath.reset();
@@ -216,6 +200,7 @@ public class AnimationView extends ImageView {
 			mPath.lineTo(l.getEndPointX(), l.getEndPointY());
 			mCanvas.drawPath(mPath, mPaint);
 			mPath.reset();
+			System.out.println("Sx: " + l.getStartPointX() + " Sy: " + l.getStartPointY());
 		}
 	}
 
