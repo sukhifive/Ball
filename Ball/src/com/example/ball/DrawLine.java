@@ -22,6 +22,7 @@ public class DrawLine extends View implements OnTouchListener {
 	{
 		super(c, a);
 		System.out.println("Attribute set");
+		
 	}
 	  public DrawLine(Context context) {
         super(context);
@@ -36,7 +37,7 @@ public class DrawLine extends View implements OnTouchListener {
             canvas.drawLine(0, 0, 100, 200, paint);
             canvas.drawLine(100, 0, 0, 200, paint);
             canvas.drawLine(downx, downy, upx, upy, paint);
-            System.out.printf("downx: " + downx, " downy: " + downy);
+            //System.out.printf("downx: " + downx, " downy: " + downy);
     }
 
 	@Override
@@ -63,6 +64,11 @@ public class DrawLine extends View implements OnTouchListener {
 	      break;
 	    }
 	    return true;
+	}
+	
+	public void drawLine()
+	{
+		System.out.print("TTTTTTTTTTTTTTTTTTTTTT");
 	}
 
 }

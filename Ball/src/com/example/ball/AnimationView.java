@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 public class AnimationView extends ImageView {
@@ -90,6 +91,7 @@ public class AnimationView extends ImageView {
 		mPaint.setStrokeWidth(25);
 		
 		lines = new ArrayList<Line>();
+		
 	}
 
 	private Runnable r = new Runnable() {
@@ -176,6 +178,7 @@ public class AnimationView extends ImageView {
 	private void touch_up() {
 		mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 		Line line = new Line();
+		
 		line.setStartPointX(sX);
 		line.setStartPointY(sY);
 		line.setEndPointX(mX);
@@ -194,6 +197,11 @@ public class AnimationView extends ImageView {
 	
 	private void drawLines()
 	{
+		View test = (View)this.getParent();
+		DrawLine layoutTest  = (DrawLine) test.findViewById(R.id.draw_line);
+		layoutTest.drawLine();
+		
+		
 		for(Line l: lines)
 		{
 			mPath.moveTo(l.getStartPointX(), l.getStartPointY());

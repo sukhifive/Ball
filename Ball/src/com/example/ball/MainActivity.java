@@ -18,8 +18,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-      //  FrameLayout layoutTest  = (FrameLayout) this.findViewById(R.id.touchView);
-        
+        DrawLine layoutTest  = (DrawLine) this.findViewById(R.id.draw_line);
+        layoutTest.drawLine();
         
         
 //        layoutTest.setLayoutParams(new FrameLayout.LayoutParams(

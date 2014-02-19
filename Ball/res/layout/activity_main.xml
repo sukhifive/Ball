@@ -33,6 +33,8 @@
         
     
     </FrameLayout>
+    
+     
  	  <com.example.ball.AnimationView
          android:id="@+id/anim_view"
          android:layout_width="match_parent"
