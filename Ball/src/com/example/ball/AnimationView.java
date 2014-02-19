@@ -162,6 +162,7 @@ public class AnimationView extends ImageView {
 		mY = y;
 		mPath.moveTo(sX, sY);
 		mPath.lineTo(mX, mY);
+		
 	//	circlePath.reset();
 		// commit the path to our offscreen
 		mCanvas.drawPath(mPath, mPaint);
@@ -172,7 +173,7 @@ public class AnimationView extends ImageView {
 		//mPath.rewind();
 		mPath.moveTo(sX, sY);
 		//
-		drawLines();
+		//drawLines();
 	}
 
 	private void touch_up() {
@@ -199,17 +200,26 @@ public class AnimationView extends ImageView {
 	{
 		View test = (View)this.getParent();
 		DrawLine layoutTest  = (DrawLine) test.findViewById(R.id.draw_line);
-		layoutTest.drawLine();
 		
 		
-		for(Line l: lines)
-		{
-			mPath.moveTo(l.getStartPointX(), l.getStartPointY());
-			mPath.lineTo(l.getEndPointX(), l.getEndPointY());
-			mCanvas.drawPath(mPath, mPaint);
-			mPath.reset();
-			System.out.println("Sx: " + l.getStartPointX() + " Sy: " + l.getStartPointY());
-		}
+		layoutTest.setStartX(sX);
+		layoutTest.setStartY(sY);
+		layoutTest.setEndX(mX);
+		layoutTest.setEndY(mY);
+		//layoutTest.drawLine();
+		
+		
+		//layoutTest.setmPath(mPath);
+		layoutTest.setDrawOn(true);
+		layoutTest.invalidate();
+		//mPath.reset();
+//		for(Line l: lines)
+//		{
+//			mPath.moveTo(l.getStartPointX(), l.getStartPointY());
+//			mPath.lineTo(l.getEndPointX(), l.getEndPointY());
+//			mCanvas.drawPath(mPath, mPaint);
+//			mPath.reset();
+//		}
 	}
 
 	@Override
