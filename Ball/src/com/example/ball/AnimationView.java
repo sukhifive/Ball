@@ -206,7 +206,7 @@ public class AnimationView extends ImageView {
 		layoutTest.setStartY(sY);
 		layoutTest.setEndX(mX);
 		layoutTest.setEndY(mY);
-		//layoutTest.drawLine();
+		layoutTest.drawLN();
 		
 		
 		//layoutTest.setmPath(mPath);

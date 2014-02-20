@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 
-public class DrawLine extends View implements OnTouchListener {
+public class DrawLine extends View {
 	Paint mPaint = new Paint();
 	ImageView imageView;
 	Bitmap bitmap;
@@ -25,6 +25,9 @@ public class DrawLine extends View implements OnTouchListener {
 	private float startY;
 	private float endX;
 	private float endY;
+	
+	private Bitmap mBitmap;
+	private Canvas mCanvas;
 
 	public DrawLine(Context c, AttributeSet a) {
 		super(c, a);
@@ -40,6 +43,8 @@ public class DrawLine extends View implements OnTouchListener {
 		mPaint.setStrokeJoin(Paint.Join.ROUND);
 		mPaint.setStrokeCap(Paint.Cap.ROUND);
 		mPaint.setStrokeWidth(25);
+		
+		
 	}
 
 	public DrawLine(Context context) {
@@ -60,17 +65,22 @@ public class DrawLine extends View implements OnTouchListener {
 		mPaint.setStrokeWidth(25);
 
 	}
+	
+	@Override
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		super.onSizeChanged(w, h, oldw, oldh);
+
+		mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+		mCanvas = new Canvas(mBitmap);
+
+	}
 
 	@Override
 	public void onDraw(Canvas canvas) {
 		// System.out.println("ssssssssssssssssssssss");
-		this.canvas = canvas;
-		canvas.drawLine(0, 0, 100, 200, mPaint);
-		canvas.drawLine(100, 0, 0, 200, mPaint);
-		mPath.moveTo(200, 200);
-		mPath.lineTo(300, 350);
-		canvas.drawPath(mPath, mPaint);
-		mPath.reset();
+	
+		
+		canvas.drawBitmap(mBitmap, 0, 0, mPaint);
 //		if(drawOn)
 //		{
 //			System.out.println("sratr : " + this.getStartX());
@@ -85,34 +95,12 @@ public class DrawLine extends View implements OnTouchListener {
 //		}
 	}
 
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
+	
 
-		int action = event.getAction();
-		switch (action) {
-		case MotionEvent.ACTION_DOWN:
-			// System.out.println("down");
-			downx = event.getX();
-			downy = event.getY();
-			break;
-		case MotionEvent.ACTION_MOVE:
-			break;
-		case MotionEvent.ACTION_UP:
-			upx = event.getX();
-			upy = event.getY();
-			// canvas.drawLine(downx, downy, upx, upy, paint);
-			invalidate();
-			break;
-		case MotionEvent.ACTION_CANCEL:
-			break;
-		default:
-			break;
-		}
-		return true;
-	}
-
-	public void drawLine() {
-		
+	public void drawLN() {
+		mPath.moveTo(this.getStartX(), this.getStartY());
+		mPath.lineTo(this.getEndX(), this.getEndY());
+		mCanvas.drawPath(mPath, mPaint);
 	}
 
 	public Path getmPath() {

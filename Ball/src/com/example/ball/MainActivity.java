@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         
         DrawLine layoutTest  = (DrawLine) this.findViewById(R.id.draw_line);
-        layoutTest.drawLine();
+       // layoutTest.drawLine();
         
         
 //        layoutTest.setLayoutParams(new FrameLayout.LayoutParams(
