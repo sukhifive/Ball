@@ -10,12 +10,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 public class AnimationView extends ImageView {
@@ -23,8 +23,8 @@ public class AnimationView extends ImageView {
 	private Context mContext;
 	int x = -1;
 	int y = -1;
-	private int xVelocity = 8;
-	private int yVelocity = 4;
+	private int xVelocity = 5;
+	private int yVelocity = 3;
 	private Handler h;
 	private final int FRAME_RATE = 2;
 	BitmapDrawable ball;
@@ -107,20 +107,12 @@ public class AnimationView extends ImageView {
 			x = this.getWidth() / 2;
 			y = this.getHeight() / 2;
 		} else {
-			x += xVelocity;
-			y += yVelocity;
-			//Boundary logic
-			if ((x > this.getWidth() - ball.getBitmap().getWidth()) || (x < 0)) {
-				xVelocity = xVelocity * -1;
-			}
-			if ((y > this.getHeight() - ball.getBitmap().getHeight())
-					|| (y < 0)) {
-				yVelocity = yVelocity * -1;
-			}
+			
+			this.collision();
 		}
-		this.collision();
+		
 		c.drawBitmap(ball.getBitmap(), x, y, null);
-	//	System.out.println("width: " + ball.getBounds().contains(r));
+		System.out.println("x: " + x + " y: " + y);
 		
 
 		c.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
@@ -185,6 +177,8 @@ public class AnimationView extends ImageView {
 		line.setEndPointY(mY);
 		
 		lines.add(line);
+		
+		
 //		mPath.lineTo(mX, mY);
 //		circlePath.reset();
 //		// commit the path to our offscreen
@@ -206,7 +200,8 @@ public class AnimationView extends ImageView {
 		layoutTest.setEndY(mY);
 		layoutTest.drawLN();	
 		layoutTest.invalidate();
-		System.out.println("Count: " + lines.size());
+		
+		
 	}
 
 	@Override
@@ -243,12 +238,59 @@ public class AnimationView extends ImageView {
 	
 	private void collision()
 	{
+		x += xVelocity;
+		y += yVelocity;
+		//Boundary logic
+		if ((x > this.getWidth() - ball.getBitmap().getWidth()) || (x < 0)) {
+			xVelocity = xVelocity * -1;
+		}
+		if ((y > this.getHeight() - ball.getBitmap().getHeight())
+				|| (y < 0)) {
+			yVelocity = yVelocity * -1;
+		}
 		for(Line l: lines)
 		{
-			if(l.getStartPointX() <= x && x <= l.getEndPointX()){
-				System.out.println("xxxxxxx");
-				System.out.println(" width: " + ball.getIntrinsicWidth());
+			Rect rect = new Rect();
+			rect.set((int)l.getStartPointX(),(int)( l.getStartPointY() - 13),(int) l.getEndPointX(),(int)( l.getEndPointY() + 13));
+			
+			if(rect.contains(x, y) || 
+					rect.contains(x + ball.getBitmap().getWidth(), y) ||
+					rect.contains(x, y + ball.getBitmap().getHeight()) || 
+					rect.contains(x + ball.getBitmap().getWidth(), y + ball.getBitmap().getHeight()))
+			{
+				if(l.getStartPointX() - l.getEndPointX() > 13){
+					yVelocity = yVelocity * -1;
+				}
+				else{
+					xVelocity = xVelocity * -1;
+				}
+				
+				
 			}
+			
+//			if(l.getStartPointX() <= x && x <= l.getEndPointX()){
+//				if(l.getStartPointY() <= y && y <= l.getStartPointY()){
+//					yVelocity = yVelocity * -1;
+//					System.out.println(" hit 1");
+//				}
+//				else if(l.getStartPointY() <= (y + ball.getBitmap().getHeight()) && 
+//						y + (ball.getBitmap().getHeight())<= l.getStartPointY()){
+//					yVelocity = yVelocity * -1;
+//					System.out.println(" hit 2");
+//				}
+//			}
+//			else if(l.getStartPointX() <= (x + ball.getBitmap().getWidth() )&& ( x +  ball.getBitmap().getWidth()) <= l.getEndPointX()){
+//				if(l.getStartPointY() <= y && y <= l.getStartPointY()){
+//					yVelocity = yVelocity * -1;
+//					System.out.println(" hit 3");
+//				}
+//				else if(l.getStartPointY() <= (y + ball.getBitmap().getHeight()) && 
+//						y + (ball.getBitmap().getHeight())<= l.getStartPointY()){
+//					yVelocity = yVelocity * -1;
+//					System.out.println(" hit 4");
+//				}
+//				
+//			}
 		}
 	}
 

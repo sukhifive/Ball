@@ -28,6 +28,7 @@ public class DrawLine extends View {
 	
 	private Bitmap mBitmap;
 	private Canvas mCanvas;
+	Paint test = new Paint();
 
 	public DrawLine(Context c, AttributeSet a) {
 		super(c, a);
@@ -41,8 +42,12 @@ public class DrawLine extends View {
 		mPaint.setColor(Color.GREEN);
 		mPaint.setStyle(Paint.Style.STROKE);
 		mPaint.setStrokeJoin(Paint.Join.ROUND);
-		mPaint.setStrokeCap(Paint.Cap.ROUND);
-		mPaint.setStrokeWidth(25);
+		mPaint.setStrokeCap(Paint.Cap.SQUARE);
+		mPaint.setStrokeWidth(26);
+		
+		test.setStrokeWidth(1);
+		test.setColor(Color.RED);
+		test.setStyle(Paint.Style.STROKE);
 		
 		
 	}
@@ -61,8 +66,12 @@ public class DrawLine extends View {
 		mPaint.setColor(Color.GREEN);
 		mPaint.setStyle(Paint.Style.STROKE);
 		mPaint.setStrokeJoin(Paint.Join.ROUND);
-		mPaint.setStrokeCap(Paint.Cap.ROUND);
-		mPaint.setStrokeWidth(25);
+		mPaint.setStrokeCap(Paint.Cap.SQUARE);
+		mPaint.setStrokeWidth(26);
+		
+		test.setStrokeWidth(1);
+		test.setColor(Color.RED);
+		test.setStyle(Paint.Style.STROKE);
 
 	}
 	
@@ -101,6 +110,15 @@ public class DrawLine extends View {
 		mPath.moveTo(this.getStartX(), this.getStartY());
 		mPath.lineTo(this.getEndX(), this.getEndY());
 		mCanvas.drawPath(mPath, mPaint);
+		
+//		mPath.moveTo(this.getStartX() , this.getStartY() + 13);
+//		mPath.lineTo(this.getEndX(), this.getEndY() + 13);
+//		mCanvas.drawPath(mPath, test);
+//		
+//		mPath.moveTo(this.getStartX() , this.getStartY() - 13);
+//		mPath.lineTo(this.getEndX(), this.getEndY() - 13);
+//		mCanvas.drawPath(mPath, test);
+		
 	}
 
 	public Path getmPath() {
