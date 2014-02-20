@@ -23,10 +23,10 @@ public class AnimationView extends ImageView {
 	private Context mContext;
 	int x = -1;
 	int y = -1;
-	private int xVelocity = 10;
-	private int yVelocity = 5;
+	private int xVelocity = 8;
+	private int yVelocity = 4;
 	private Handler h;
-	private final int FRAME_RATE = 10;
+	private final int FRAME_RATE = 2;
 	BitmapDrawable ball;
 	private float downx;
 	private float downy;
@@ -66,7 +66,7 @@ public class AnimationView extends ImageView {
 		mContext = context;
 		h = new Handler();
 		ball = (BitmapDrawable) mContext.getResources().getDrawable(
-				R.drawable.ball);
+				R.drawable.ball3);
 		this.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 		paint.setColor(Color.WHITE);
 		paint.setStrokeWidth(5);
@@ -109,6 +109,7 @@ public class AnimationView extends ImageView {
 		} else {
 			x += xVelocity;
 			y += yVelocity;
+			//Boundary logic
 			if ((x > this.getWidth() - ball.getBitmap().getWidth()) || (x < 0)) {
 				xVelocity = xVelocity * -1;
 			}
@@ -117,7 +118,7 @@ public class AnimationView extends ImageView {
 				yVelocity = yVelocity * -1;
 			}
 		}
-		
+		this.collision();
 		c.drawBitmap(ball.getBitmap(), x, y, null);
 	//	System.out.println("width: " + ball.getBounds().contains(r));
 		
@@ -145,6 +146,7 @@ public class AnimationView extends ImageView {
 	private void touch_move(float x, float y) {
 //		float dx = Math.abs(x - mX);
 //		float dy = Math.abs(y - mY);
+//		code for tolerance
 //		if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
 //			mPath.moveTo(mX, mY);
 ////			mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
@@ -165,12 +167,9 @@ public class AnimationView extends ImageView {
 		
 	//	circlePath.reset();
 		// commit the path to our offscreen
-		mCanvas.drawPath(mPath, mPaint);
-		
-		
+		mCanvas.drawPath(mPath, mPaint);		
 		// kill this so we don't double draw
 		mPath.reset();
-		//mPath.rewind();
 		mPath.moveTo(sX, sY);
 		//
 		//drawLines();
@@ -200,26 +199,14 @@ public class AnimationView extends ImageView {
 	{
 		View test = (View)this.getParent();
 		DrawLine layoutTest  = (DrawLine) test.findViewById(R.id.draw_line);
-		
-		
+	
 		layoutTest.setStartX(sX);
 		layoutTest.setStartY(sY);
 		layoutTest.setEndX(mX);
 		layoutTest.setEndY(mY);
-		layoutTest.drawLN();
-		
-		
-		//layoutTest.setmPath(mPath);
-		layoutTest.setDrawOn(true);
+		layoutTest.drawLN();	
 		layoutTest.invalidate();
-		//mPath.reset();
-//		for(Line l: lines)
-//		{
-//			mPath.moveTo(l.getStartPointX(), l.getStartPointY());
-//			mPath.lineTo(l.getEndPointX(), l.getEndPointY());
-//			mCanvas.drawPath(mPath, mPaint);
-//			mPath.reset();
-//		}
+		System.out.println("Count: " + lines.size());
 	}
 
 	@Override
@@ -252,6 +239,17 @@ public class AnimationView extends ImageView {
 			break;
 		}
 		return true;
+	}
+	
+	private void collision()
+	{
+		for(Line l: lines)
+		{
+			if(l.getStartPointX() <= x && x <= l.getEndPointX()){
+				System.out.println("xxxxxxx");
+				System.out.println(" width: " + ball.getIntrinsicWidth());
+			}
+		}
 	}
 
 }
