@@ -245,23 +245,41 @@ public class AnimationView extends ImageView {
 		}
 		for (Line l : lines) {
 			Rect rect = new Rect();
-			System.out.println("start x: " + l.getStartPointX() + " start y: "
-					+ l.getEndPointY() + " end x: " + l.getEndPointX()
-					+ " end y: " + l.getEndPointY());
+//			System.out.println("start x: " + l.getStartPointX() + " start y: "
+//					+ l.getEndPointY() + " end x: " + l.getEndPointX()
+//					+ " end y: " + l.getEndPointY());
+			// create rect
 			if (Math.abs(l.getStartPointX() - l.getEndPointX()) > 13) {
 				// horizontal line
-				System.out.println(" H");
-				rect.set((int) l.getStartPointX(),
-						(int) (l.getStartPointY() - 13),
-						(int) l.getEndPointX(), (int) (l.getEndPointY() + 13));
+				if (l.getStartPointX() < l.getEndPointX()) {
+					rect.set((int) l.getEndPointX(),
+							(int) (l.getEndPointY() - 13),
+							(int) l.getStartPointX(),
+							(int) (l.getStartPointY() - 13));
+				} else {
+					rect.set((int) l.getStartPointX(),
+							(int) (l.getStartPointY() - 13),
+							(int) l.getEndPointX(),
+							(int) (l.getEndPointY() + 13));
+				}
+				// System.out.println(" H");
 
-			} else// virtical line
-			{
-				System.out.println(" V");
-				rect.set((int) l.getStartPointX() - 13,
-						(int) l.getStartPointY(), (int) l.getEndPointX() + 13,
-						(int) l.getEndPointY());
+			} else{// virtical line
+			
+				// System.out.println(" V");
+				if (l.getEndPointY() < l.getStartPointY()) {
+					rect.set((int) l.getEndPointX() - 13,
+							(int) l.getEndPointY(),
+							(int) l.getStartPointX() + 13,
+							(int) l.getStartPointY());
+				} else {
+					rect.set((int) l.getStartPointX() - 13,
+							(int) l.getStartPointY(),
+							(int) l.getEndPointX() + 13, (int) l.getEndPointY());
+				}
+
 			}
+			// collision logic
 			if (rect.contains(x, y)
 					|| rect.contains(x + ball.getBitmap().getWidth(), y)
 					|| rect.contains(x, y + ball.getBitmap().getHeight())
