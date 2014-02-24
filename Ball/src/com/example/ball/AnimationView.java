@@ -50,6 +50,11 @@ public class AnimationView extends ImageView {
 	private static final float TOUCH_TOLERANCE = 4;
 	private float sX, sY;
 
+	private static final String ABOVE = "ABOVE";
+	private static final String BOTTOM = "BOTTOM";
+	private static final String LEFT = "LEFT";
+	private static final String RIGHT = "RIGHT";
+
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(w, h, oldw, oldh);
@@ -107,6 +112,7 @@ public class AnimationView extends ImageView {
 		} else {
 
 			this.collision();
+
 		}
 
 		c.drawBitmap(ball.getBitmap(), x, y, null);
@@ -196,6 +202,8 @@ public class AnimationView extends ImageView {
 		layoutTest.setEndX(mX);
 		layoutTest.setEndY(mY);
 		layoutTest.drawLN();
+		this.drawRect(this.determineBallLoc(), this.lines.get(lines.size() - 1));
+		layoutTest.drawRectBelowForRightToLeftLine();
 		layoutTest.invalidate();
 
 	}
@@ -233,6 +241,38 @@ public class AnimationView extends ImageView {
 		return true;
 	}
 
+	private void drawRect(String ballLoc, Line l) {
+		if (Math.abs(l.getStartPointX() - l.getEndPointX()) > 13) {
+
+			if (this.ABOVE.equalsIgnoreCase(ballLoc)) {
+				if (l.getStartPointX() > l.getEndPointX()) {
+					// line right to left
+
+				}
+			}
+
+		}
+	}
+
+	private String determineBallLoc() {
+		String returnVal = "";
+		if (Math.abs(lines.get(lines.size() - 1).getStartPointX()
+				- lines.get(lines.size() - 1).getEndPointX()) > 13) {
+			if (lines.get(lines.size() - 1).getStartPointY() > y) {
+				returnVal = this.ABOVE;
+			} else {
+				returnVal = this.BOTTOM;
+			}
+		} else {
+			if (lines.get(lines.size() - 1).getStartPointX() < x) {
+				returnVal = this.LEFT;
+			} else {
+				returnVal = this.RIGHT;
+			}
+		}
+		return returnVal;
+	}
+
 	private void collision() {
 		x += xVelocity;
 		y += yVelocity;
@@ -245,18 +285,21 @@ public class AnimationView extends ImageView {
 		}
 		for (Line l : lines) {
 			Rect rect = new Rect();
-//			System.out.println("start x: " + l.getStartPointX() + " start y: "
-//					+ l.getEndPointY() + " end x: " + l.getEndPointX()
-//					+ " end y: " + l.getEndPointY());
+			// System.out.println("start x: " + l.getStartPointX() +
+			// " start y: "
+			// + l.getEndPointY() + " end x: " + l.getEndPointX()
+			// + " end y: " + l.getEndPointY());
 			// create rect
 			if (Math.abs(l.getStartPointX() - l.getEndPointX()) > 13) {
 				// horizontal line
-				if (l.getStartPointX() < l.getEndPointX()) {
+				if (l.getStartPointX() > l.getEndPointX()) {
+					// line right to left
 					rect.set((int) l.getEndPointX(),
 							(int) (l.getEndPointY() - 13),
 							(int) l.getStartPointX(),
-							(int) (l.getStartPointY() - 13));
+							(int) (l.getStartPointY() + 13));
 				} else {
+					// line left to right
 					rect.set((int) l.getStartPointX(),
 							(int) (l.getStartPointY() - 13),
 							(int) l.getEndPointX(),
@@ -264,15 +307,17 @@ public class AnimationView extends ImageView {
 				}
 				// System.out.println(" H");
 
-			} else{// virtical line
-			
+			} else {// virtical line
+
 				// System.out.println(" V");
 				if (l.getEndPointY() < l.getStartPointY()) {
+					// line bottom to up
 					rect.set((int) l.getEndPointX() - 13,
 							(int) l.getEndPointY(),
 							(int) l.getStartPointX() + 13,
 							(int) l.getStartPointY());
 				} else {
+					// line up to down
 					rect.set((int) l.getStartPointX() - 13,
 							(int) l.getStartPointY(),
 							(int) l.getEndPointX() + 13, (int) l.getEndPointY());
