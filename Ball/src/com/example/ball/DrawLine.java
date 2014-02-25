@@ -51,7 +51,7 @@ public class DrawLine extends View {
 
 //		rPaint.setAntiAlias(true);
 //		rPaint.setDither(true);
-		rPaint.setColor(Color.GREEN);
+		rPaint.setColor(Color.RED);
 		rPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 //		rPaint.setStrokeJoin(Paint.Join.ROUND);
 		rPaint.setStrokeCap(Paint.Cap.SQUARE);
@@ -85,7 +85,7 @@ public class DrawLine extends View {
 		rPaint.setStyle(Paint.Style.FILL);
 		rPaint.setStrokeJoin(Paint.Join.ROUND);
 		rPaint.setStrokeCap(Paint.Cap.SQUARE);
-		rPaint.setStrokeWidth(26);
+		rPaint.setStrokeWidth(0);
 
 		test.setStrokeWidth(1);
 		test.setColor(Color.RED);
@@ -140,7 +140,7 @@ public class DrawLine extends View {
 		Rect rect = new Rect();
 		rect.set((int) this.getEndX(), (int) this.getEndY(),
 				mCanvas.getWidth(), mCanvas.getHeight());
-		mCanvas.drawRect(rect, mPaint);
+		mCanvas.drawRect(rect, rPaint);
 	}
 
 	public Path getmPath() {
