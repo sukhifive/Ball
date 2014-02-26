@@ -201,9 +201,9 @@ public class AnimationView extends ImageView {
 		layoutTest.setStartY(sY);
 		layoutTest.setEndX(mX);
 		layoutTest.setEndY(mY);
-		layoutTest.drawLN();
-		this.drawRect(this.determineBallLoc(), this.lines.get(lines.size() - 1));
-		layoutTest.drawRectBelowForRightToLeftLine();
+		layoutTest.drawLN(x, y);
+//		this.drawRect(this.determineBallLoc(), this.lines.get(lines.size() - 1));
+//		layoutTest.drawRectBelowForRightToLeftLine();
 		layoutTest.invalidate();
 
 	}

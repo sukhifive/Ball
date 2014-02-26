@@ -121,11 +121,11 @@ public class DrawLine extends View {
 		// }
 	}
 
-	public void drawLN() {
+	public void drawLN(int ballX, int ballY) {
 		mPath.moveTo(this.getStartX(), this.getStartY());
 		mPath.lineTo(this.getEndX(), this.getEndY());
-		mCanvas.drawPath(mPath, rPaint);
-
+		mCanvas.drawPath(mPath, mPaint);
+		drawBox();
 		// mPath.moveTo(this.getStartX() , this.getStartY() + 13);
 		// mPath.lineTo(this.getEndX(), this.getEndY() + 13);
 		// mCanvas.drawPath(mPath, test);
@@ -134,6 +134,46 @@ public class DrawLine extends View {
 		// mPath.lineTo(this.getEndX(), this.getEndY() - 13);
 		// mCanvas.drawPath(mPath, test);
 
+	}
+	
+	
+	public void drawBox()
+	{
+		
+		if (Math.abs(this.getStartX() - this.getEndX()) > 13) {
+			//Horizontal line
+			if (this.getStartX() > this.getEndX()) {
+				// line right to left
+				Rect rect = new Rect();
+				rect.set((int) this.getEndX(), (int) this.getEndY(),
+						mCanvas.getWidth(), mCanvas.getHeight());
+				mCanvas.drawRect(rect, rPaint);
+				
+			}
+			else{
+				Rect rect = new Rect();
+				rect.set((int) this.getStartX(), (int) this.getStartY(),
+						mCanvas.getWidth(), mCanvas.getHeight());
+				mCanvas.drawRect(rect, rPaint);
+			}
+			
+		}else {// virtical line
+
+			// System.out.println(" V");
+			if (this.getEndY() < this.getStartY()) {
+				// line bottom to up
+				Rect rect = new Rect();
+				rect.set((int) this.getEndX(), (int) this.getEndY(),
+						mCanvas.getWidth(), mCanvas.getHeight());
+				mCanvas.drawRect(rect, rPaint);
+			}
+			else{
+				Rect rect = new Rect();
+				rect.set((int) this.getStartX(), (int) this.getStartY(),
+						mCanvas.getWidth(), mCanvas.getHeight());
+				mCanvas.drawRect(rect, rPaint);
+			}
+		}
 	}
 
 	public void drawRectBelowForRightToLeftLine() {
