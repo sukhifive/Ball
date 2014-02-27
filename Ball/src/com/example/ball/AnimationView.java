@@ -45,6 +45,7 @@ public class AnimationView extends ImageView {
 	private Path circlePath;
 	private Paint mPaint;
 	private List<Line> lines;
+	private List<Rect> storedRect;
 
 	private float mX, mY;
 	private static final float TOUCH_TOLERANCE = 4;
@@ -97,7 +98,7 @@ public class AnimationView extends ImageView {
 		mPaint.setStrokeWidth(25);
 
 		lines = new ArrayList<Line>();
-
+		storedRect = new ArrayList<Rect>();
 	}
 
 	private Runnable r = new Runnable() {
@@ -186,7 +187,7 @@ public class AnimationView extends ImageView {
 				
 			if(isStartedCloseToBoundry(mX, mY)){
 				
-				
+				System.out.println("colllll");
 				mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 				Line line = new Line();
 		
@@ -200,7 +201,7 @@ public class AnimationView extends ImageView {
 				}
 		
 				lines.add(line);
-		
+				this.addRect(line);
 				// mPath.lineTo(mX, mY);
 				// circlePath.reset();
 				// // commit the path to our offscreen
@@ -209,7 +210,7 @@ public class AnimationView extends ImageView {
 				// mPath.reset();
 		
 				drawLines();
-				
+				lineStarted = false;
 			}
 		}
 	}
@@ -304,88 +305,80 @@ public class AnimationView extends ImageView {
 		if ((y > this.getHeight() - ball.getBitmap().getHeight()) || (y < 0)) {
 			yVelocity = yVelocity * -1;
 		}
-		for (Line l : lines) {
-			Rect rect = new Rect();
-			// System.out.println("start x: " + l.getStartPointX() +
-			// " start y: "
-			// + l.getEndPointY() + " end x: " + l.getEndPointX()
-			// + " end y: " + l.getEndPointY());
-			// create rect
-			if (Math.abs(l.getStartPointX() - l.getEndPointX()) > 13) {
-				// horizontal line
-				if (l.getStartPointX() > l.getEndPointX()) {
-					// line right to left
-					rect.set((int) l.getEndPointX(),
-							(int) (l.getEndPointY() - 13),
-							(int) l.getStartPointX(),
-							(int) (l.getStartPointY() + 13));
-				} else {
-					// line left to right
-					rect.set((int) l.getStartPointX(),
-							(int) (l.getStartPointY() - 13),
-							(int) l.getEndPointX(),
-							(int) (l.getEndPointY() + 13));
-				}
-				// System.out.println(" H");
-
-			} else {// virtical line
-
-				// System.out.println(" V");
-				if (l.getEndPointY() < l.getStartPointY()) {
-					// line bottom to up
-					rect.set((int) l.getEndPointX() - 13,
-							(int) l.getEndPointY(),
-							(int) l.getStartPointX() + 13,
-							(int) l.getStartPointY());
-				} else {
-					// line up to down
-					rect.set((int) l.getStartPointX() - 13,
-							(int) l.getStartPointY(),
-							(int) l.getEndPointX() + 13, (int) l.getEndPointY());
-				}
-
-			}
-			// collision logic
+		
+		
+//		for (Line l : lines) {
+//			Rect rect = new Rect();
+//			
+//			if (Math.abs(l.getStartPointX() - l.getEndPointX()) > 13) {
+//				// horizontal line
+//				if (l.getStartPointX() > l.getEndPointX()) {
+//					// line right to left
+//					rect.set((int) l.getEndPointX(),
+//							(int) (l.getEndPointY() - 13),
+//							(int) l.getStartPointX(),
+//							(int) (l.getStartPointY() + 13));
+//				} else {
+//					// line left to right
+//					rect.set((int) l.getStartPointX(),
+//							(int) (l.getStartPointY() - 13),
+//							(int) l.getEndPointX(),
+//							(int) (l.getEndPointY() + 13));
+//				}
+//				// System.out.println(" H");
+//
+//			} else {// virtical line
+//
+//				// System.out.println(" V");
+//				if (l.getEndPointY() < l.getStartPointY()) {
+//					// line bottom to up
+//					rect.set((int) l.getEndPointX() - 13,
+//							(int) l.getEndPointY(),
+//							(int) l.getStartPointX() + 13,
+//							(int) l.getStartPointY());
+//				} else {
+//					// line up to down
+//					rect.set((int) l.getStartPointX() - 13,
+//							(int) l.getStartPointY(),
+//							(int) l.getEndPointX() + 13, (int) l.getEndPointY());
+//				}
+//
+//			}
+//			// collision logic
+//			if (rect.contains(x, y)
+//					|| rect.contains(x + ball.getBitmap().getWidth(), y)
+//					|| rect.contains(x, y + ball.getBitmap().getHeight())
+//					|| rect.contains(x + ball.getBitmap().getWidth(), y
+//							+ ball.getBitmap().getHeight())) {
+//
+//				if (Math.abs(l.getStartPointX() - l.getEndPointX()) > 13) {
+//					yVelocity = yVelocity * -1;
+//				} else {
+//					xVelocity = xVelocity * -1;
+//				}
+//
+//			}
+//
+//		
+//		}
+		
+		for(Rect rect: storedRect)
+		{
 			if (rect.contains(x, y)
 					|| rect.contains(x + ball.getBitmap().getWidth(), y)
 					|| rect.contains(x, y + ball.getBitmap().getHeight())
 					|| rect.contains(x + ball.getBitmap().getWidth(), y
 							+ ball.getBitmap().getHeight())) {
-
-				if (Math.abs(l.getStartPointX() - l.getEndPointX()) > 13) {
+				System.out.println("h: " + rect.height());
+				if(Math.abs(rect.height() ) < 50){
 					yVelocity = yVelocity * -1;
-				} else {
-					xVelocity = xVelocity * -1;
+					System.out.println("hit 1");
 				}
-
+				else{
+					xVelocity = xVelocity * -1;
+					System.out.println("hit 2");
+				}
 			}
-
-			// if(l.getStartPointX() <= x && x <= l.getEndPointX()){
-			// if(l.getStartPointY() <= y && y <= l.getStartPointY()){
-			// yVelocity = yVelocity * -1;
-			// System.out.println(" hit 1");
-			// }
-			// else if(l.getStartPointY() <= (y + ball.getBitmap().getHeight())
-			// &&
-			// y + (ball.getBitmap().getHeight())<= l.getStartPointY()){
-			// yVelocity = yVelocity * -1;
-			// System.out.println(" hit 2");
-			// }
-			// }
-			// else if(l.getStartPointX() <= (x + ball.getBitmap().getWidth()
-			// )&& ( x + ball.getBitmap().getWidth()) <= l.getEndPointX()){
-			// if(l.getStartPointY() <= y && y <= l.getStartPointY()){
-			// yVelocity = yVelocity * -1;
-			// System.out.println(" hit 3");
-			// }
-			// else if(l.getStartPointY() <= (y + ball.getBitmap().getHeight())
-			// &&
-			// y + (ball.getBitmap().getHeight())<= l.getStartPointY()){
-			// yVelocity = yVelocity * -1;
-			// System.out.println(" hit 4");
-			// }
-			//
-			// }
 		}
 	}
 	
@@ -395,11 +388,52 @@ public class AnimationView extends ImageView {
 			return true;
 		}else
 		{
-			if( y <= 13 || x >= (mCanvas.getHeight() - 13)){
+			if( y <= 13 || y >= (mCanvas.getHeight() - 13)){
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	private void addRect(Line l)
+	{
+		Rect rect = new Rect();
+		
+		if (Math.abs(l.getStartPointX() - l.getEndPointX()) > 13) {
+			// horizontal line
+			if (l.getStartPointX() > l.getEndPointX()) {
+				// line right to left
+				rect.set((int) l.getEndPointX(),
+						(int) (l.getEndPointY() - 13),
+						(int) l.getStartPointX(),
+						(int) (l.getStartPointY() + 13));
+			} else {
+				// line left to right
+				rect.set((int) l.getStartPointX(),
+						(int) (l.getStartPointY() - 13),
+						(int) l.getEndPointX(),
+						(int) (l.getEndPointY() + 13));
+			}
+			// System.out.println(" H");
+
+		} else {// virtical line
+
+			// System.out.println(" V");
+			if (l.getEndPointY() < l.getStartPointY()) {
+				// line bottom to up
+				rect.set((int) l.getEndPointX() - 13,
+						(int) l.getEndPointY(),
+						(int) l.getStartPointX() + 13,
+						(int) l.getStartPointY());
+			} else {
+				// line up to down
+				rect.set((int) l.getStartPointX() - 13,
+						(int) l.getStartPointY(),
+						(int) l.getEndPointX() + 13, (int) l.getEndPointY());
+			}
+
+		}
+		storedRect.add(rect);
 	}
 
 }

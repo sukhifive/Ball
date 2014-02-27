@@ -125,7 +125,7 @@ public class DrawLine extends View {
 		mPath.moveTo(this.getStartX(), this.getStartY());
 		mPath.lineTo(this.getEndX(), this.getEndY());
 		mCanvas.drawPath(mPath, mPaint);
-		drawBox();
+		drawBox(ballX, ballY);
 		// mPath.moveTo(this.getStartX() , this.getStartY() + 13);
 		// mPath.lineTo(this.getEndX(), this.getEndY() + 13);
 		// mCanvas.drawPath(mPath, test);
@@ -137,7 +137,7 @@ public class DrawLine extends View {
 	}
 	
 	
-	public void drawBox()
+	public void drawBox(int ballX, int ballY)
 	{
 		
 		if (Math.abs(this.getStartX() - this.getEndX()) > 13) {
@@ -145,15 +145,37 @@ public class DrawLine extends View {
 			if (this.getStartX() > this.getEndX()) {
 				// line right to left
 				Rect rect = new Rect();
-				rect.set((int) this.getEndX(), (int) this.getEndY(),
-						mCanvas.getWidth(), mCanvas.getHeight());
+				//find ball location above or bottom
+				if(ballY < (int) this.getEndY()){
+					//ball is above draw box below the line
+					rect.set((int) this.getEndX(), (int) this.getEndY(),
+							mCanvas.getWidth(), mCanvas.getHeight());
+					
+					
+				}
+				else
+				{
+					//ball is below so draw the box above
+					rect.set(0, 0, (int)this.getStartX(),(int) this.getStartY());
+				}
 				mCanvas.drawRect(rect, rPaint);
-				
 			}
 			else{
+				//line left to right
+				
 				Rect rect = new Rect();
-				rect.set((int) this.getStartX(), (int) this.getStartY(),
-						mCanvas.getWidth(), mCanvas.getHeight());
+				
+				if(ballY < (int) this.getEndY()){
+					//ball is above the the line
+					rect.set((int) this.getStartX(), (int) this.getStartY(),
+							mCanvas.getWidth(), mCanvas.getHeight());
+				}
+				else
+				{
+					//ball is below so draw the box above
+					rect.set(0, 0, (int)this.getEndX(),(int) this.getEndY());
+				}
+				
 				mCanvas.drawRect(rect, rPaint);
 			}
 			
@@ -163,14 +185,37 @@ public class DrawLine extends View {
 			if (this.getEndY() < this.getStartY()) {
 				// line bottom to up
 				Rect rect = new Rect();
-				rect.set((int) this.getEndX(), (int) this.getEndY(),
-						mCanvas.getWidth(), mCanvas.getHeight());
+				
+				if(ballX < this.getStartX())
+				{
+					//ball is on left
+					rect.set((int) this.getEndX(), (int) this.getEndY(),
+							mCanvas.getWidth(), mCanvas.getHeight());
+				}
+				else 
+				{
+					//ball is on right
+					rect.set(0, 0,
+							(int)this.getStartX(), (int)this.getStartY());
+				}
+				
 				mCanvas.drawRect(rect, rPaint);
 			}
 			else{
+				//line top to down
 				Rect rect = new Rect();
-				rect.set((int) this.getStartX(), (int) this.getStartY(),
-						mCanvas.getWidth(), mCanvas.getHeight());
+				if(ballX < this.getStartX())
+				{
+					//ball is on left
+					rect.set((int) this.getStartX(), (int) this.getStartY(),
+							mCanvas.getWidth(), mCanvas.getHeight());
+				}
+				else
+				{
+					//ball is on right
+					rect.set(0, 0,
+							(int)this.getEndX(), (int) this.getEndY());
+				}
 				mCanvas.drawRect(rect, rPaint);
 			}
 		}
