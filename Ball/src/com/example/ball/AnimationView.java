@@ -54,6 +54,9 @@ public class AnimationView extends ImageView {
 	private static final String BOTTOM = "BOTTOM";
 	private static final String LEFT = "LEFT";
 	private static final String RIGHT = "RIGHT";
+	
+	
+	private boolean lineStarted = false;
 
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -128,12 +131,20 @@ public class AnimationView extends ImageView {
 	}
 
 	private void touch_start(float x, float y) {
-		mPath.reset();
-		mPath.moveTo(x, y);
-		mX = x;
-		mY = y;
-		sX = x;
-		sY = y;
+		
+		if(isStartedCloseToBoundry(x, y))
+		{
+			System.out.println("close to it");
+			lineStarted = true;
+			mPath.reset();
+			mPath.moveTo(x, y);
+			mX = x;
+			mY = y;
+			sX = x;
+			sY = y;
+		}
+		
+		
 	}
 
 	private void touch_move(float x, float y) {
@@ -152,45 +163,55 @@ public class AnimationView extends ImageView {
 		// // kill this so we don't double draw
 		// mPath.reset();
 		// }
-		mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-		mX = x;
-		mY = y;
-		mPath.moveTo(sX, sY);
-		mPath.lineTo(mX, mY);
-
-		// circlePath.reset();
-		// commit the path to our offscreen
-		mCanvas.drawPath(mPath, mPaint);
-		// kill this so we don't double draw
-		mPath.reset();
-		mPath.moveTo(sX, sY);
-		//
-		// drawLines();
+		if(lineStarted) {
+			mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+			mX = x;
+			mY = y;
+			mPath.moveTo(sX, sY);
+			mPath.lineTo(mX, mY);
+	
+			// circlePath.reset();
+			// commit the path to our offscreen
+			mCanvas.drawPath(mPath, mPaint);
+			// kill this so we don't double draw
+			mPath.reset();
+			mPath.moveTo(sX, sY);
+			//
+			// drawLines();
+		}
 	}
 
 	private void touch_up() {
-		mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-		Line line = new Line();
-
-		line.setStartPointX(sX);
-		line.setStartPointY(sY);
-		line.setEndPointX(mX);
-		if (mY < 0) {
-			line.setEndPointY(0);
-		} else {
-			line.setEndPointY(mY);
+		if(lineStarted){
+				
+			if(isStartedCloseToBoundry(mX, mY)){
+				
+				
+				mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+				Line line = new Line();
+		
+				line.setStartPointX(sX);
+				line.setStartPointY(sY);
+				line.setEndPointX(mX);
+				if (mY < 0) {
+					line.setEndPointY(0);
+				} else {
+					line.setEndPointY(mY);
+				}
+		
+				lines.add(line);
+		
+				// mPath.lineTo(mX, mY);
+				// circlePath.reset();
+				// // commit the path to our offscreen
+				// mCanvas.drawPath(mPath, mPaint);
+				// // kill this so we don't double draw
+				// mPath.reset();
+		
+				drawLines();
+				
+			}
 		}
-
-		lines.add(line);
-
-		// mPath.lineTo(mX, mY);
-		// circlePath.reset();
-		// // commit the path to our offscreen
-		// mCanvas.drawPath(mPath, mPaint);
-		// // kill this so we don't double draw
-		// mPath.reset();
-
-		drawLines();
 	}
 
 	private void drawLines() {
@@ -366,6 +387,19 @@ public class AnimationView extends ImageView {
 			//
 			// }
 		}
+	}
+	
+	private boolean isStartedCloseToBoundry(float x, float y)
+	{
+		if(x <= 13 || x >= (mCanvas.getWidth() - 13)){
+			return true;
+		}else
+		{
+			if( y <= 13 || x >= (mCanvas.getHeight() - 13)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
