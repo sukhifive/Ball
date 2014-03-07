@@ -42,7 +42,7 @@ public class DrawLine extends View {
 		mPaint.setAntiAlias(true);
 		mPaint.setDither(true);
 		mPaint.setColor(Color.GREEN);
-		mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+		mPaint.setStyle(Paint.Style.FILL);
 		mPaint.setStrokeJoin(Paint.Join.ROUND);
 		mPaint.setStrokeCap(Paint.Cap.SQUARE);
 		mPaint.setStrokeWidth(26);
@@ -56,40 +56,37 @@ public class DrawLine extends View {
 //		rPaint.setStrokeJoin(Paint.Join.ROUND);
 		rPaint.setStrokeCap(Paint.Cap.SQUARE);
 
-		test.setStrokeWidth(1);
-		test.setColor(Color.RED);
-		test.setStyle(Paint.Style.STROKE);
 
 	}
 
 	public DrawLine(Context context) {
 		super(context);
-		System.out.println("not Attribute set");
-		// paint.setColor(Color.GREEN);
-		// paint.setStrokeWidth(20);
-		drawOn = false;
-		setLayerType(View.LAYER_TYPE_HARDWARE, null);
-		mPath = new Path();
-
-		mPaint.setAntiAlias(true);
-		mPaint.setDither(true);
-		mPaint.setColor(Color.GREEN);
-		mPaint.setStyle(Paint.Style.STROKE);
-		mPaint.setStrokeJoin(Paint.Join.ROUND);
-		mPaint.setStrokeCap(Paint.Cap.SQUARE);
-		mPaint.setStrokeWidth(26);
-		
-		rPaint.setAntiAlias(true);
-		rPaint.setDither(true);
-		rPaint.setColor(Color.GREEN);
-		rPaint.setStyle(Paint.Style.FILL);
-		rPaint.setStrokeJoin(Paint.Join.ROUND);
-		rPaint.setStrokeCap(Paint.Cap.SQUARE);
-		rPaint.setStrokeWidth(0);
-
-		test.setStrokeWidth(1);
-		test.setColor(Color.RED);
-		test.setStyle(Paint.Style.STROKE);
+//		System.out.println("not Attribute set");
+//		// paint.setColor(Color.GREEN);
+//		// paint.setStrokeWidth(20);
+//		drawOn = false;
+//		setLayerType(View.LAYER_TYPE_HARDWARE, null);
+//		mPath = new Path();
+//
+//		mPaint.setAntiAlias(true);
+//		mPaint.setDither(true);
+//		mPaint.setColor(Color.GREEN);
+//		mPaint.setStyle(Paint.Style.STROKE);
+//		mPaint.setStrokeJoin(Paint.Join.ROUND);
+//		mPaint.setStrokeCap(Paint.Cap.SQUARE);
+//		mPaint.setStrokeWidth(26);
+//		
+//		rPaint.setAntiAlias(true);
+//		rPaint.setDither(true);
+//		rPaint.setColor(Color.GREEN);
+//		rPaint.setStyle(Paint.Style.FILL);
+//		rPaint.setStrokeJoin(Paint.Join.ROUND);
+//		rPaint.setStrokeCap(Paint.Cap.SQUARE);
+//		rPaint.setStrokeWidth(0);
+//
+//		test.setStrokeWidth(1);
+//		test.setColor(Color.RED);
+//		test.setStyle(Paint.Style.STROKE);
 
 	}
 
@@ -108,11 +105,11 @@ public class DrawLine extends View {
 	}
 
 	public void drawLN(int ballX, int ballY) {
-		
+		drawBox(ballX, ballY);
 		mPath.moveTo(this.getStartX(), this.getStartY());
 		mPath.lineTo(this.getEndX(), this.getEndY());
-		mCanvas.drawPath(mPath, mPaint);	
-		drawBox(ballX, ballY);
+//		mCanvas.drawPath(mPath, mPaint);	
+		mCanvas.drawLine(this.getStartX(), this.getStartY(), this.getEndX(), this.getEndY(), mPaint);
 		this.invalidate();
 	
 	}
