@@ -42,7 +42,7 @@ public class DrawLine extends View {
 		mPaint.setAntiAlias(true);
 		mPaint.setDither(true);
 		mPaint.setColor(Color.GREEN);
-		mPaint.setStyle(Paint.Style.FILL);
+		mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 		mPaint.setStrokeJoin(Paint.Join.ROUND);
 		mPaint.setStrokeCap(Paint.Cap.SQUARE);
 		mPaint.setStrokeWidth(26);
@@ -108,10 +108,11 @@ public class DrawLine extends View {
 	}
 
 	public void drawLN(int ballX, int ballY) {
-		drawBox(ballX, ballY);
+		
 		mPath.moveTo(this.getStartX(), this.getStartY());
 		mPath.lineTo(this.getEndX(), this.getEndY());
-		mCanvas.drawPath(mPath, mPaint);		
+		mCanvas.drawPath(mPath, mPaint);	
+		drawBox(ballX, ballY);
 		this.invalidate();
 	
 	}
