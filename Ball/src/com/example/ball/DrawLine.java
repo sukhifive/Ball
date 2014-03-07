@@ -101,28 +101,29 @@ public class DrawLine extends View {
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		canvas.drawBitmap(mBitmap, 0, 0, mPaint);		
+		canvas.drawBitmap(mBitmap, 0, 0, mPaint);	
 	}
 
-	public void drawLN(int ballX, int ballY) {
-		drawBox(ballX, ballY);
+	public Rect drawLN(int ballX, int ballY) {
+		Rect box = drawBox(ballX, ballY);
 		mPath.moveTo(this.getStartX(), this.getStartY());
 		mPath.lineTo(this.getEndX(), this.getEndY());
 //		mCanvas.drawPath(mPath, mPaint);	
 		mCanvas.drawLine(this.getStartX(), this.getStartY(), this.getEndX(), this.getEndY(), mPaint);
 		this.invalidate();
+		return box;
 	
 	}
 	
 	
-	public void drawBox(int ballX, int ballY)
+	public Rect drawBox(int ballX, int ballY)
 	{
-		
+		Rect rect = new Rect();
 		if (Math.abs(this.getStartX() - this.getEndX()) > 13) {
 			//Horizontal line
 			if (this.getStartX() > this.getEndX()) {
 				// line right to left
-				Rect rect = new Rect();
+				
 				//find ball location above or bottom
 				if(ballY < (int) this.getEndY()){
 					//ball is above draw box below the line
@@ -141,7 +142,7 @@ public class DrawLine extends View {
 			else{
 				//line left to right
 				
-				Rect rect = new Rect();
+				
 				
 				if(ballY < (int) this.getEndY()){
 					//ball is above the the line
@@ -163,7 +164,7 @@ public class DrawLine extends View {
 			// System.out.println(" V");
 			if (this.getEndY() < this.getStartY()) {
 				// line bottom to up
-				Rect rect = new Rect();
+				
 				
 				if(ballX < this.getStartX())
 				{
@@ -182,7 +183,6 @@ public class DrawLine extends View {
 			}
 			else{
 				//line top to down
-				Rect rect = new Rect();
 				if(ballX < this.getStartX())
 				{
 					//ball is on left
@@ -198,6 +198,7 @@ public class DrawLine extends View {
 				mCanvas.drawRect(rect, rPaint);
 			}
 		}
+		return rect;
 	}
 
 	public void drawRectBelowForRightToLeftLine() {

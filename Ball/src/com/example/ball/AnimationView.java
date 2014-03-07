@@ -46,6 +46,8 @@ public class AnimationView extends ImageView {
 	private Paint mPaint;
 	private List<Line> lines;
 	private List<Rect> storedRect;
+	private List<Rect> storedBoxRect;
+	private boolean lineIntersaction = false;
 
 	private float mX, mY;
 	private static final float TOUCH_TOLERANCE = 4;
@@ -99,6 +101,7 @@ public class AnimationView extends ImageView {
 
 		lines = new ArrayList<Line>();
 		storedRect = new ArrayList<Rect>();
+		storedBoxRect = new ArrayList<Rect>();
 	}
 
 	private Runnable r = new Runnable() {
@@ -133,7 +136,7 @@ public class AnimationView extends ImageView {
 
 	private void touch_start(float x, float y) {
 		
-		if(isStartedCloseToBoundry(x, y))
+		if(isStartedCloseToBoundry(x, y) && !inTheCoveredArea(x, y))
 		{
 			System.out.println("close to it");
 			lineStarted = true;
@@ -177,15 +180,17 @@ public class AnimationView extends ImageView {
 			// kill this so we don't double draw
 			mPath.reset();
 			mPath.moveTo(sX, sY);
-			//
-			// drawLines();
+			lineIntersaction = lineCollision(mX, mY);
+			if(lineIntersaction){
+				touch_up();
+			}
 		}
 	}
 
 	private void touch_up() {
 		if(lineStarted){
 				
-			if(isStartedCloseToBoundry(mX, mY)){
+			if(isStartedCloseToBoundry(mX, mY) || lineIntersaction){
 				
 				System.out.println("colllll");
 				mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
@@ -223,7 +228,8 @@ public class AnimationView extends ImageView {
 		layoutTest.setStartY(sY);
 		layoutTest.setEndX(mX);
 		layoutTest.setEndY(mY);
-		layoutTest.drawLN(x, y);
+		Rect box  = layoutTest.drawLN(x, y);
+		this.storedBoxRect.add(box);
 //		this.drawRect(this.determineBallLoc(), this.lines.get(lines.size() - 1));
 //		layoutTest.drawRectBelowForRightToLeftLine();
 	//	layoutTest.invalidate();
@@ -372,14 +378,28 @@ public class AnimationView extends ImageView {
 				System.out.println("h: " + rect.height());
 				if(Math.abs(rect.height() ) < 50){
 					yVelocity = yVelocity * -1;
-					System.out.println("hit 1");
+					//System.out.println("hit 1");
 				}
 				else{
 					xVelocity = xVelocity * -1;
-					System.out.println("hit 2");
+					//System.out.println("hit 2");
 				}
 			}
 		}
+	}
+	
+	private boolean lineCollision(float x, float y){
+		
+		for(Rect rect: storedRect)
+		{
+			if (rect.contains((int)x, (int) y)) {
+				System.out.println("intersaction");
+				return true;
+				
+			}
+		}
+		return false;
+		
 	}
 	
 	private boolean isStartedCloseToBoundry(float x, float y)
@@ -394,6 +414,21 @@ public class AnimationView extends ImageView {
 		}
 		return false;
 	}
+	
+	private boolean inTheCoveredArea(float x, float y)
+	{
+		for(Rect rect: storedBoxRect)
+		{
+			if (rect.contains((int)x, (int) y)) {
+				System.out.println("intersaction");
+				return true;
+				
+			}
+		}
+		return false;
+	}
+	
+	
 	
 	private void addRect(Line l)
 	{
@@ -435,5 +470,8 @@ public class AnimationView extends ImageView {
 		}
 		storedRect.add(rect);
 	}
+	
+	
+	
 
 }
