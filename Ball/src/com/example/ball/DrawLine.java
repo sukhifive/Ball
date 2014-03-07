@@ -42,7 +42,7 @@ public class DrawLine extends View {
 		mPaint.setAntiAlias(true);
 		mPaint.setDither(true);
 		mPaint.setColor(Color.GREEN);
-		mPaint.setStyle(Paint.Style.STROKE);
+		mPaint.setStyle(Paint.Style.FILL);
 		mPaint.setStrokeJoin(Paint.Join.ROUND);
 		mPaint.setStrokeCap(Paint.Cap.SQUARE);
 		mPaint.setStrokeWidth(26);
@@ -52,7 +52,7 @@ public class DrawLine extends View {
 //		rPaint.setAntiAlias(true);
 //		rPaint.setDither(true);
 		rPaint.setColor(Color.RED);
-		rPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+		rPaint.setStyle(Paint.Style.FILL);
 //		rPaint.setStrokeJoin(Paint.Join.ROUND);
 		rPaint.setStrokeCap(Paint.Cap.SQUARE);
 
@@ -104,36 +104,16 @@ public class DrawLine extends View {
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		// System.out.println("ssssssssssssssssssssss");
-
-		canvas.drawBitmap(mBitmap, 0, 0, mPaint);
-		// if(drawOn)
-		// {
-		// System.out.println("sratr : " + this.getStartX());
-		// mPath.moveTo(this.getStartX(), this.getStartY());
-		// mPath.lineTo(this.getEndX(), this.getEndY());
-		// canvas.drawPath(mPath, mPaint);
-		// mPath.reset();
-		// //drawOn = false;
-		// canvas.drawLine(100, 100, 100, 200, mPaint);
-		// canvas.drawLine(100, 0, 0, 200, mPaint);
-		// canvas.drawLine(downx, downy, upx, upy, mPaint);
-		// }
+		canvas.drawBitmap(mBitmap, 0, 0, mPaint);		
 	}
 
 	public void drawLN(int ballX, int ballY) {
+		drawBox(ballX, ballY);
 		mPath.moveTo(this.getStartX(), this.getStartY());
 		mPath.lineTo(this.getEndX(), this.getEndY());
-		mCanvas.drawPath(mPath, mPaint);
-		drawBox(ballX, ballY);
-		// mPath.moveTo(this.getStartX() , this.getStartY() + 13);
-		// mPath.lineTo(this.getEndX(), this.getEndY() + 13);
-		// mCanvas.drawPath(mPath, test);
-		//
-		// mPath.moveTo(this.getStartX() , this.getStartY() - 13);
-		// mPath.lineTo(this.getEndX(), this.getEndY() - 13);
-		// mCanvas.drawPath(mPath, test);
-
+		mCanvas.drawPath(mPath, mPaint);		
+		this.invalidate();
+	
 	}
 	
 	
@@ -169,6 +149,7 @@ public class DrawLine extends View {
 					//ball is above the the line
 					rect.set((int) this.getStartX(), (int) this.getStartY(),
 							mCanvas.getWidth(), mCanvas.getHeight());
+					System.out.println("h: " + mCanvas.getHeight());
 				}
 				else
 				{
