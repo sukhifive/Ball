@@ -136,7 +136,7 @@ public class AnimationView extends ImageView {
 
 	private void touch_start(float x, float y) {
 		
-		if(isStartedCloseToBoundry(x, y) && !inTheCoveredArea(x, y))
+		if((isStartedCloseToBoundry(x, y) && !inTheCoveredArea(x, y)) || lineCollision(x, y))
 		{
 			System.out.println("close to it");
 			lineStarted = true;
@@ -173,28 +173,39 @@ public class AnimationView extends ImageView {
 			mY = y;
 			mPath.moveTo(sX, sY);
 			mPath.lineTo(mX, mY);
-	
+			
+				
 			// circlePath.reset();
 			// commit the path to our offscreen
 			mCanvas.drawPath(mPath, mPaint);
 			// kill this so we don't double draw
 			mPath.reset();
 			mPath.moveTo(sX, sY);
-			lineIntersaction = lineCollision(mX, mY);
-			if(lineIntersaction){
+			if(Math.abs(sX - mX) > 20|| Math.abs(sY - mY) > 20){
+				lineIntersaction = lineCollision(mX, mY);
+			}
+			if(lineIntersaction || isStartedCloseToBoundry(x, y)){
 				touch_up();
 			}
 		}
 	}
 
 	private void touch_up() {
+		mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 		if(lineStarted){
 				
 			if(isStartedCloseToBoundry(mX, mY) || lineIntersaction){
-				
-				System.out.println("colllll");
-				mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-				Line line = new Line();
+						
+				Line line = new Line();				
+				if(Math.abs(sX - mX) > 13)
+				{
+					//horizontal line
+					mY = sY;
+				}
+				else if (Math.abs(sY - mY) > 13)
+				{
+					mX = sX;
+				}
 		
 				line.setStartPointX(sX);
 				line.setStartPointY(sY);
