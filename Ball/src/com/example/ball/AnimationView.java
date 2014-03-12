@@ -196,20 +196,38 @@ public class AnimationView extends ImageView {
 
 	private void touch_up() {
 		mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+		float lineSlope = lineSlope(sX, sY, mX, mY);		
+		if(lineSlope > .90)
+		{
+			//vertical line
+			mX = sX;
+		}
+		else if (lineSlope < .10)
+		{
+			//horizontal line
+			mY = sY;
+		}
+		else{
+
+			lineStarted = false;	
+		}
 		if(lineStarted){
 				
 			if(isStartedCloseToBoundry(mX, mY) || lineIntersaction){
 						
-				Line line = new Line();				
-				if(Math.abs(sX - mX) > 13)
-				{
-					//horizontal line
-					mY = sY;
-				}
-				else if (Math.abs(sY - mY) > 13)
-				{
-					mX = sX;
-				}
+				Line line = new Line();		
+				
+				
+				
+//				if(Math.abs(sX - mX) > 13)
+//				{
+//					//horizontal line
+//					mY = sY;
+//				}
+//				else if (Math.abs(sY - mY) > 13)
+//				{
+//					mX = sX;
+//				}
 		
 				line.setStartPointX(sX);
 				line.setStartPointY(sY);
@@ -493,6 +511,13 @@ public class AnimationView extends ImageView {
 		float sum = xDifference + yDifference;
 		float sqRoot = (float) Math.sqrt((double)sum);
 		return sqRoot;
+	}
+	
+	private float lineSlope(float startX, float startY, float endX, float endY){
+		float yDiff = endY - startY;
+		float xDiff = endX - startX;
+		
+		return Math.abs(yDiff / xDiff);
 	}
 	
 
