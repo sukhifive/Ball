@@ -102,6 +102,7 @@ public class AnimationView extends ImageView {
 		lines = new ArrayList<Line>();
 		storedRect = new ArrayList<Rect>();
 		storedBoxRect = new ArrayList<Rect>();
+		
 	}
 
 	private Runnable r = new Runnable() {
@@ -184,8 +185,11 @@ public class AnimationView extends ImageView {
 			if(Math.abs(sX - mX) > 20|| Math.abs(sY - mY) > 20){
 				lineIntersaction = lineCollision(mX, mY);
 			}
-			if(lineIntersaction || isStartedCloseToBoundry(x, y)){
-				touch_up();
+			if(this.distance(sX, sY, mX, mY) > 20)
+			{
+				if(lineIntersaction || isStartedCloseToBoundry(x, y)){
+					touch_up();
+				}
 			}
 		}
 	}
@@ -482,7 +486,14 @@ public class AnimationView extends ImageView {
 		storedRect.add(rect);
 	}
 	
-	
+	private float distance(float startX, float startY, float endX, float endY)
+	{
+		float xDifference = (endX - startX) * (endX - startX);
+		float yDifference = (endY - startY) * (endY - startY);
+		float sum = xDifference + yDifference;
+		float sqRoot = (float) Math.sqrt((double)sum);
+		return sqRoot;
+	}
 	
 
 }
