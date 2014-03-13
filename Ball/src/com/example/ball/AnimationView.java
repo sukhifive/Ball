@@ -196,8 +196,10 @@ public class AnimationView extends ImageView {
 
 	private void touch_up() {
 		mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-		float lineSlope = lineSlope(sX, sY, mX, mY);		
-		if(lineSlope > .90)
+		float lineSlope = lineSlope(sX, sY, mX, mY);	
+		System.out.println("startx: " + sX + " starty: " + sY + " endX: " + mX + " endY: " + mY);
+		System.out.println("slope: " + lineSlope);
+		if(lineSlope > 9.8)
 		{
 			//vertical line
 			mX = sX;
@@ -408,7 +410,7 @@ public class AnimationView extends ImageView {
 					|| rect.contains(x, y + ball.getBitmap().getHeight())
 					|| rect.contains(x + ball.getBitmap().getWidth(), y
 							+ ball.getBitmap().getHeight())) {
-				System.out.println("h: " + rect.height());
+				//System.out.println("h: " + rect.height());
 				if(Math.abs(rect.height() ) < 50){
 					yVelocity = yVelocity * -1;
 					//System.out.println("hit 1");
