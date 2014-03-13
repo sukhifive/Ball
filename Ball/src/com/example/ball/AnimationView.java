@@ -168,7 +168,7 @@ public class AnimationView extends ImageView {
 		// // kill this so we don't double draw
 		// mPath.reset();
 		// }
-		if(lineStarted) {
+		if(lineStarted && !inTheCoveredArea(x, y)) {
 			mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 			mX = x;
 			mY = y;
@@ -183,11 +183,20 @@ public class AnimationView extends ImageView {
 			mPath.reset();
 			mPath.moveTo(sX, sY);
 			if(Math.abs(sX - mX) > 20|| Math.abs(sY - mY) > 20){
+				System.out.println(" distance less < 20");
 				lineIntersaction = lineCollision(mX, mY);
+				System.out.println(" lineIntersaction:" + lineIntersaction);
+				if(lineIntersaction && lineCollision(sX, sY)){
+					System.out.println(" same line");
+					lineIntersaction = false;
+				}
+				
 			}
 			if(this.distance(sX, sY, mX, mY) > 20)
 			{
+				System.out.println(" distance less < 20 second");
 				if(lineIntersaction || isStartedCloseToBoundry(x, y)){
+					System.out.println(lineIntersaction);
 					touch_up();
 				}
 			}
@@ -199,13 +208,24 @@ public class AnimationView extends ImageView {
 		float lineSlope = lineSlope(sX, sY, mX, mY);	
 		System.out.println("startx: " + sX + " starty: " + sY + " endX: " + mX + " endY: " + mY);
 		System.out.println("slope: " + lineSlope);
+		System.out.println("distance: " + this.distance(sX, sY, mX, mY));
+		
 		if(lineSlope > 9.8)
 		{
+			System.out.println("vLine: "  + lineSlope / this.getHeight());
 			//vertical line
-			mX = sX;
+			if( (lineSlope / this.getHeight() ) < .07)
+			{
+				System.out.println("vLine: hit");
+				mX = sX;
+			}
+			else{
+				lineStarted = false;	
+			}
 		}
-		else if (lineSlope < .10)
+		else if (lineSlope < .07)
 		{
+			System.out.println("hLine: ");
 			//horizontal line
 			mY = sY;
 		}
@@ -428,12 +448,27 @@ public class AnimationView extends ImageView {
 		for(Rect rect: storedRect)
 		{
 			if (rect.contains((int)x, (int) y)) {
-				System.out.println("intersaction");
+				System.out.println("intersaction");				
 				return true;
 				
 			}
 		}
 		return false;
+		
+	}
+	
+	private Rect getLineCollision(float x, float y){
+		Rect rec = null;
+		for(Rect rect: storedRect)
+		{
+			if (rect.contains((int)x, (int) y)) {
+				System.out.println("intersaction");				
+				rec = rect;
+				break;
+				
+			}
+		}
+		return rec;
 		
 	}
 	
