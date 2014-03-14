@@ -48,6 +48,7 @@ public class AnimationView extends ImageView {
 	private List<Rect> storedRect;
 	private List<Rect> storedBoxRect;
 	private boolean lineIntersaction = false;
+	private Rect startedRec = null;
 
 	private float mX, mY;
 	private static final float TOUCH_TOLERANCE = 4;
@@ -137,7 +138,8 @@ public class AnimationView extends ImageView {
 
 	private void touch_start(float x, float y) {
 		
-		if((isStartedCloseToBoundry(x, y) && !inTheCoveredArea(x, y)) || lineCollision(x, y))
+		startedRec = getLineCollision(x, y);
+		if((isStartedCloseToBoundry(x, y) && !inTheCoveredArea(x, y)) || startedRec != null)
 		{
 			System.out.println("close to it");
 			lineStarted = true;
@@ -186,7 +188,7 @@ public class AnimationView extends ImageView {
 				System.out.println(" distance less < 20");
 				lineIntersaction = lineCollision(mX, mY);
 				System.out.println(" lineIntersaction:" + lineIntersaction);
-				if(lineIntersaction && lineCollision(sX, sY)){
+				if(lineIntersaction && startedRec.contains((int)mX, (int) mY) ){
 					System.out.println(" same line");
 					lineIntersaction = false;
 				}
