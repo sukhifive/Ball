@@ -170,6 +170,8 @@ public class AnimationView extends ImageView {
 		// // kill this so we don't double draw
 		// mPath.reset();
 		// }
+		
+		
 		if(lineStarted && !inTheCoveredArea(x, y)) {
 			mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 			mX = x;
